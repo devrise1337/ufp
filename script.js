@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactForm();
     initScrollAnimations();
     initSmoothScrolling();
+    initVideoManagement();
 });
 
 // Navigation functionality
@@ -237,6 +238,35 @@ function initSmoothScrolling() {
             }
         });
     });
+}
+
+// Video management for mobile compatibility
+function initVideoManagement() {
+    const heroVideo = document.querySelector('.hero-video');
+    
+    if (heroVideo) {
+        // Ensure video loops properly
+        heroVideo.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        });
+        
+        // Force play on mobile devices
+        heroVideo.addEventListener('canplay', function() {
+            this.play().catch(function(error) {
+                console.log('Autoplay prevented:', error);
+            });
+        });
+        
+        // Handle visibility change to restart video
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && heroVideo.paused) {
+                heroVideo.play().catch(function(error) {
+                    console.log('Play prevented:', error);
+                });
+            }
+        });
+    }
 }
 
 // Parallax effect for hero section
